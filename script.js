@@ -2,9 +2,10 @@ const buttonsList = document.querySelectorAll("button");
 const processingText = document.querySelector(".processing");
 const resultText = document.querySelector(".result");
 
-let currText = "";
-let firstOperandEntered = false;
-let operatorEntered = false;
+let opA = undefined;
+let opB = undefined;
+let operator = undefined;
+let result = undefined;
 
 function add(a, b) {
   return a + b;
@@ -17,7 +18,7 @@ function mul(a, b) {
   return a * b;
 }
 function div(a, b) {
-  return a / b;
+  return Math.round((a * 100.0) / b) / 100;
 }
 function mod(a, b) {
   return a % b;
@@ -39,45 +40,52 @@ function performOperation(a, op, b) {
 }
 
 function processButtonClick(e) {
-  const currTextArr = currText.split(" ");
-  console.log(currTextArr);
+  const btnText = e.target.textContent;
+  console.log(btnText);
 
-  if (e.target.textContent === "=") {
-    if (firstOperandEntered && !operatorEntered) {
-      resultText.textContent = currTextArr[0];
-      return;
+  if (+btnText >= 0 && +btnText <= 9) {
+    if (operator == undefined) {
+      if (opA == undefined) {
+        opA = +btnText;
+        processingText.textContent = btnText;
+      } else {
+        opA = opA * 10 + +btnText;
+        processingText.textContent += btnText;
+      }
+    } else {
+      if (opB == undefined) {
+        opB = +btnText;
+      } else {
+        opB = opB * 10 + +btnText;
+      }
+      processingText.textContent += btnText;
     }
-    if (!firstOperandEntered) {
-      resultText.textContent = processingText.textContent;
-      return;
-    }
-    if (firstOperandEntered && operatorEntered) {
-      if (currTextArr[2])
-        resultText.textContent = performOperation(
-          Number(currTextArr[0]),
-          currTextArr[1],
-          Number(currTextArr[2])
-        );
-      else resultText.textContent = currTextArr[0];
-      return;
-    }
-  }
-
-  if (
-    ["+", "-", "*", "/", "%"].includes(e.target.textContent) &&
-    !operatorEntered
+  } else if (
+    btnText == "+" ||
+    btnText == "/" ||
+    btnText == "*" ||
+    btnText == "-" ||
+    btnText == "%"
   ) {
-    if (!currText) return;
-    firstOperandEntered = true;
-    currText += " " + e.target.textContent + " ";
-    operatorEntered = true;
-    console.log(currText);
-  } else if (e.target.textContent >= "0" && e.target.textContent <= "9") {
-    currText += e.target.textContent;
+    if (opA !== undefined && operator === undefined) {
+      operator = btnText;
+      processingText.textContent += btnText;
+    } else if (result !== undefined) {
+      opA = result;
+      operator = btnText;
+      processingText.textContent = opA + operator;
+    }
+  } else if (btnText == "=") {
+    if ((opA !== undefined) & (opB !== undefined) && operator !== undefined) {
+      result = performOperation(opA, operator, opB);
+      resultText.textContent = result;
+      console.log(result);
+      opA = opB = operator = undefined;
+    }
+  } else if (btnText == "AC") {
+    operator = opA = opB = undefined;
+    processingText.textContent = resultText.textContent = "0";
   }
-
-  if(e.target.textContent==="")
-  processingText.textContent = currText;
 }
 
 buttonsList.forEach((button) => {
