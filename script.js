@@ -6,6 +6,8 @@ let opA = undefined;
 let opB = undefined;
 let operator = undefined;
 let result = undefined;
+let minusA = false;
+let minusB = false;
 
 function add(a, b) {
   return a + b;
@@ -47,7 +49,8 @@ function processButtonClick(e) {
     if (operator == undefined) {
       if (opA == undefined) {
         opA = +btnText;
-        processingText.textContent = btnText;
+        if (!minusA) processingText.textContent = btnText;
+        else processingText.textContent += btnText;
       } else {
         opA = opA * 10 + +btnText;
         processingText.textContent += btnText;
@@ -68,23 +71,42 @@ function processButtonClick(e) {
     btnText == "%"
   ) {
     if (opA !== undefined && operator === undefined) {
+      console.log("block 1");
       operator = btnText;
       processingText.textContent += btnText;
-    } else if (result !== undefined) {
+    } else if (result !== undefined && opA === undefined) {
+      console.log("block 2");
       opA = result;
       operator = btnText;
       processingText.textContent = opA + operator;
+    } else if (btnText == "-") {
+      console.log("block 3");
+      if (opA === undefined && !minusA) {
+        minusA = true;
+        processingText.textContent = "-";
+      } else if (operator !== undefined && opB === undefined && !minusB) {
+        minusB = true;
+        processingText.textContent += "-";
+      }
+    } else if (operator !== undefined && opB === undefined) {
+      operator = btnText;
+      let processedText = processingText.textContent;
+      processingText.textContent = processedText.slice(0, -1) + operator;
     }
   } else if (btnText == "=") {
     if ((opA !== undefined) & (opB !== undefined) && operator !== undefined) {
+      if (minusA) opA = -opA;
+      if (minusB) opB = -opB;
       result = performOperation(opA, operator, opB);
       resultText.textContent = result;
       console.log(result);
       opA = opB = operator = undefined;
+      minusA = minusB = false;
     }
   } else if (btnText == "AC") {
     operator = opA = opB = undefined;
     processingText.textContent = resultText.textContent = "0";
+    minusA = minusB = false;
   }
 }
 
