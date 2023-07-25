@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap");
 * {
   margin: 0;
   padding: 0;
@@ -13,6 +14,7 @@ body {
   align-items: center;
   justify-content: center;
   background-color: #afafaf;
+  font-family: "Roboto", sans-serif;
 }
 .calc-container {
   border-radius: 15px;
@@ -31,9 +33,13 @@ body {
   align-items: flex-end;
   padding: 2em 2.5em 1em;
 }
-.result{
-    margin-top:0.5em;
-    font-size: 2rem;
+.processing {
+  font-weight: 300;
+}
+.result {
+  margin-top: 0.5em;
+  font-size: 2rem;
+  font-weight: 400;
 }
 .buttons-container {
   background-color: #292929;
@@ -52,19 +58,19 @@ button {
   border: 0;
   background-color: transparent;
 }
-button:hover{
-    background-color: #5555555b;
+button:hover {
+  background-color: #5555555b;
 }
-button:active{
-    background-color: #55555593;
+button:active {
+  background-color: #55555593;
 }
-.numbers{
-    color:white;
+.numbers {
+  color: white;
 }
-.operations{
-    color:#afafaf;
+.operations {
+  color: #afafaf;
 }
-#zero{
-    flex-grow: 1;
-    border-radius: 16px;
+#zero {
+  flex-grow: 1;
+  border-radius: 16px;
 }
